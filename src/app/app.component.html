@@ -1,46 +1,86 @@
 <div class="container">
-  <h1>Editor de texto</h1>
   <div class="options">
     <!-- Text Format -->
     <ng-container *ngFor="let btn of buttons">
-      <button [id]='btn.id' [class]='btn.class' (click)="this.modifyText(btn.id, false, null);">
-        <mat-icon>{{btn.icono}}</mat-icon>
+      <button
+        [id]="btn.id"
+        [class]="btn.class"
+        [matTooltip]="btn.malTooltip"
+        (click)="
+          validateInput(btn.id)
+            ? inputClick(btn.id)
+            : this.modifyText(btn.id, false, null)
+        "
+      >
+        <input
+          *ngIf="btn.id == 'file'"
+          type="file"
+          name="file"
+          id="file-input"
+          (change)="insertFile($event)"
+          hidden
+        />
+
+        <input
+          *ngIf="btn.id == 'insertImage'"
+          type="file"
+          name="insertImage"
+          id="insertImage-input"
+          accept="image/*"
+          (change)="insertImage($event)"
+          hidden
+        />
+
+        <input
+          *ngIf="btn.id == 'foreColor' || btn.id == 'backColor'"
+          type="color"
+          [name]="btn.id + '-input'"
+          [id]="btn.id + '-input'"
+          (change)="modifyText(btn.id, false, $event.target)"
+          hidden
+        />
+
+        <mat-icon>{{ btn.icono }}</mat-icon>
       </button>
     </ng-container>
 
-    <!-- Headings -->
-    <select id="formatBlock" class="adv-option-button" (change)="modifyText('formatBlock', false, $event.target)">
-      <option *ngFor="let size of font_size" [value]="size">{{size}}</option>
+    <select
+      id="fontSize"
+      class="adv-option-button"
+      (click)="modifyText('fontSize', false, $event.target)"
+    >
+      <option *ngFor="let size of font_size" [value]="size">
+        <ng-container [ngSwitch]="size">
+          <h1 *ngSwitchCase="'5'">Título</h1>
+          <h3 *ngSwitchCase="'4'">Subtítulo</h3>
+          <h4 *ngSwitchCase="'3'">Texto</h4>
+        </ng-container>
+      </option>
     </select>
 
-    <!-- Font -->
-    <select id="fontName" class="adv-option-button">
-      <option *ngFor="let type of font_list" [value]="type">{{type}}</option>
+    <!-- Font Style -->
+    <select
+      id="fontName"
+      class="adv-option-button"
+      (click)="modifyText('fontName', false, $event.target)"
+    >
+      <option *ngFor="let type of font_list" [value]="type">
+        {{ type }}
+      </option>
     </select>
-
-    <!-- <select id="fontSize" class="adv-option-button"></select> -->
-
-    <!-- Color -->
-    <div class="input-wrapper">
-      <input
-        type="color"
-        id="foreColor"
-        class="adv-option-button"
-        (change)="modifyText('foreColor', false, $event.target)"
-      />
-      <label for="foreColor">Font Color</label>
-    </div>
-
-    <div class="input-wrapper">
-      <input
-        type="color"
-        id="backColor"
-        class="adv-option-button"
-        (change)="modifyText('backColor', false, $event.target)"
-      />
-      <label for="backColor">Highlight Color</label>
-    </div>
-
   </div>
-  <div id="text-input" contenteditable="true"></div>
+
+  <div id="text-input" contenteditable="true" #editor></div>
+
+  <section class="uploaded-area" *ngIf="array_file.length > 0">
+    <li class="row" *ngFor="let file of array_file">
+      <div class="content">
+        <mat-icon>insert_drive_file</mat-icon>
+        <div class="details">
+          <span class="name">image_01.png</span>
+        </div>
+      </div>
+      <mat-icon>check</mat-icon>
+    </li>
+  </section>
 </div>

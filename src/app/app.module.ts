@@ -10,6 +10,8 @@ import { EditorComponent } from './editor/editor.component';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     NoopAnimationsModule,
     MatIconModule,
+    MatTooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
