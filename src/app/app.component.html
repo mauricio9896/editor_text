@@ -73,14 +73,20 @@
   <div id="text-input" contenteditable="true" #editor></div>
 
   <section class="uploaded-area" *ngIf="array_file.length > 0">
-    <li class="row" *ngFor="let file of array_file">
+    <li class="row" *ngFor="let file of array_file; let i=index">
       <div class="content">
         <mat-icon>insert_drive_file</mat-icon>
         <div class="details">
-          <span class="name">image_01.png</span>
+          <span >{{file.name}}</span>
         </div>
+        <button (click)="deleteFile(i)"><mat-icon>clear</mat-icon></button>
       </div>
-      <mat-icon>check</mat-icon>
     </li>
   </section>
 </div>
+
+<button (click)="resizeImage('increase')">Aumentar tamaño</button>
+<br>
+<button (click)="resizeImage('decrease')">Disminuir tamaño</button>
+
+

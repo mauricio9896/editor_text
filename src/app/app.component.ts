@@ -12,6 +12,7 @@ export class AppComponent {
 
   title = 'Gmail API Example';
 
+  color : any ;
   font_size= ['5', '4','3'];
   font_list = [
     'Arial',
@@ -123,11 +124,17 @@ export class AppComponent {
 
   ]
 
-  array_file : any[] = []
+  array_file : File [] = []
+
+
+  // prueba
+  selectedImage!: HTMLImageElement;
+  mouseX!: number;
+  mouseY!: number;
+
 
   constructor() {}
 
-  //main logic
   modifyText(command: any, defaultUi: any, value :any ) {
     value != null ? value = value.value : null;
     document.execCommand(command, defaultUi, value);
@@ -144,8 +151,12 @@ export class AppComponent {
   }
 
   insertFile(event : any){
-    const file: File = event.target.files[0];
+    const file : File = event.target.files[0];
     this.array_file.push(file)
+  }
+
+  deleteFile(i:number){
+    this.array_file.splice(i,1)
   }
 
   insertImage(event : any){
@@ -153,7 +164,6 @@ export class AppComponent {
 
     if (file.type.match('image.*')) {
       const reader = new FileReader();
-
       reader.onload = () => {
         const imageSrc = reader.result as string;
         const image = new Image();
@@ -162,9 +172,34 @@ export class AppComponent {
         image.onload = () => {
           this.editor.nativeElement.focus();
           document.execCommand('insertHTML', false, `<img src="${imageSrc}" alt="${file.name}">`);
+          this.setResizable();
         };
       };
       reader.readAsDataURL(file);
+    }
+  }
+
+  setResizable() {
+    const images = this.editor.nativeElement.querySelectorAll('img');
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
+      img.style.position = 'relative';
+      img.style.width = '100%';
+      img.style.maxWidth = '400px'; // ajusta el tamaño máximo aquí
+      img.style.height = 'auto';
+    }
+  }
+
+
+  resizeImage(direction: 'increase' | 'decrease') {
+    const images = this.editor.nativeElement.querySelectorAll('img');
+    for (let i = 0; i < images.length; i++) {
+      const img = images[i];
+      const currentWidth = img.clientWidth;
+      const newWidth = direction === 'increase' ? currentWidth + 10 : currentWidth - 10;
+      if (newWidth > 0 && newWidth <= 400) { // ajusta el tamaño máximo aquí
+        img.style.width = `${newWidth}px`;
+      }
     }
   }
 }
