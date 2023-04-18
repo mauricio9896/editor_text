@@ -161,7 +161,6 @@ export class AppComponent {
 
   insertImage(event : any){
     const file: File = event.target.files[0];
-
     if (file.type.match('image.*')) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -185,7 +184,7 @@ export class AppComponent {
       const img = images[i];
       img.style.position = 'relative';
       img.style.width = '100%';
-      img.style.maxWidth = '400px'; // ajusta el tamaño máximo aquí
+      img.style.maxWidth = '200px'; // ajusta el tamaño máximo aquí
       img.style.height = 'auto';
     }
   }
